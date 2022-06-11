@@ -1,0 +1,10 @@
+*~
+*.o
+*.hi
+dist
+dist-newstyle
+cabal-dev
+cabal.sandbox.config
+.cabal-sandbox
+.ghc.environment.*
+.DS_Store

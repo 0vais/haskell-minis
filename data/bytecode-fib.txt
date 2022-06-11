@@ -1,0 +1,21 @@
+# To get 15th fibonacci number change 9 to 14. works only for n>=2 where considering 0th fib is 0
+LOAD_VAL 9
+
+WRITE_VAR â€˜countâ€™
+LOAD_VAL 0
+WRITE_VAR â€˜aâ€™
+LOAD_VAL 1
+LOOP:
+WRITE_VAR â€˜bâ€™
+READ_VAR â€˜aâ€™
+READ_VAR â€˜bâ€™
+ADD
+READ_VAR â€˜bâ€™
+WRITE_VAR â€˜aâ€™
+READ_VAR â€˜countâ€™
+LOAD_VAL 1
+SUBTRACT
+WRITE_VAR â€˜countâ€™
+READ_VAR â€˜countâ€™
+CJUMP LOOP
+RETURN_VALUE

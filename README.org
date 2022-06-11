@@ -1,0 +1,82 @@
+* These are small programs created for practicing haskell.
+** Bytecode Evaluator
+*** Problem Statement:
+You are a TA at a university, and you want to evaluate your studentâ€™s homework
+without executing their (untrusted) code. You decide to write a small
+web-service that takes bytecode as input, and interprets the results.
+
+The bytecode language you need to support includes basic arithmetic and
+variables. The bytecode language is stack, rather than register based.
+ByteCode (right) is given for the following pseudo code (left):
+
+|--------------------+-------------------|
+| *Pseudo Code*      | *ByteCode*        |
+|--------------------+-------------------|
+| function f() {     |                   |
+| x = 1              | LOAD_VAL 1        |
+| WRITE_VAR â€˜xâ€™  |                   |
+|                    |                   |
+| y = 2              | LOAD_VAL 2        |
+|                    | WRITE_VAR â€˜yâ€™ |
+|                    |                   |
+| return (x + 1) * y | READ_VAR â€˜xâ€™  |
+|                    | LOAD_VAL 1        |
+|                    | ADD               |
+|                    |                   |
+|                    | READ_VAR â€˜yâ€™  |
+|                    | MULTIPLY          |
+|                    |                   |
+|                    | RETURN_VALUE      |
+| }                  |                   |
+|--------------------+-------------------|
+
+Add a data type `ByteCode` that can represent bytecode like in the example
+above, along with an interpreter for said bytecode. Make sure your code is
+total.
+*** It is a cabal project and to run it for the given example use the following:
+
+  #+begin_src bash
+  >cd haskell-minis
+  >cabal build bytecode
+  >cat input/bytecode-example-input.txt | cabal run bytecode 
+  #+end_src
+
+*** Examples in repl
+  #+begin_src bash
+  >cd haskell-minis
+  >cabal repl bytecode
+  # Some examples
+  λ> :set -XOverloadedStrings
+  λ> runByteCode "LOAD_VAL 5\nRETURN_VALUE"
+  "Success: Return: 5"
+  λ> runByteCode "LOAD_VAL 5\nLOAD_VAL 10\nADD\nRETURN_VALUE"
+  "Success: Return: 15"
+  #There are some inputs defined in the code which will generate *syntax errors*
+  λ> serror0
+  "LOAD_VAL4"
+  λ> runByteCode serror0
+  "Syntax Error: Either *operator* is invalid or it is followed by extra/invalid characters in line [LOAD_VAL4]"
+  λ> serror1
+  "LOAD_VAL 4  \nADD"
+  λ> runByteCode serror1
+  "Syntax Error: Either *integer* is invalid or extra spaces in line [LOAD_VAL 4  ]"
+  λ> serror2
+  "LOAD_VAL 4\nADD ab"
+  λ> runByteCode serror2
+  "Syntax Error: Either *operator* is invalid or it is followed by extra/invalid characters in line [ADD ab]"
+  #Similarly some inputs which will generate *runtime errors*
+  λ> perror0
+  "RETURN_VALUE"
+  λ> runByteCode perror0
+  "Error: Stack under flow"
+  λ> runByteCode perror4
+  "Error: Division by zero"
+  #Example given in the problem statement
+  λ> input1
+  "LOAD_VAL 1\nWRITE_VAR \226\8364\732x\226\8364\8482\nLOAD_VAL 2\nWRITE_VAR \226\8364\732y\226\8364\8482\nREAD_VAR \226\8364\732x\226\8364\8482\nLOAD_VAL 1\nADD\nREAD_VAR \226\8364\732y\226\8364\8482\nMULTIPLY\nRETURN_VALUE"
+  λ> runByteCode input1
+  "Success: Return: 4"
+  #+end_src
+
+** Connected4 game
+   A heuristic based implementation of four in a row/connected4 game.
