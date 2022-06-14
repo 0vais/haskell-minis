@@ -16,16 +16,17 @@ import TextShow
 
 import Logic
 import Types
+import SimpleBoard
 
 instance TextShow Player where
   showb First = "One(1)"
   showb Second = "Two(2)"
 
-showBoard :: Game Text
+showBoard :: (Board brd) => Game brd Text
 showBoard = do
   Config {..} <- ask
   GameState {..} <- get
-  let showChar cn rn = case playerAt board (cn, rn) of
+  let showChar cn rn = case playerAt (cn, rn) board of
         Nothing -> "."
         Just First -> "X"
         Just Second -> "0"
@@ -44,19 +45,21 @@ prompt player = do
       T.putStrLn $ "ERROR: Enter only numbers!"
       prompt player
 
-play :: Game ()
+play :: (Board brd) => Game brd ()
 play = flip catchError errorHandler $ do
-  full <- isBoardFull
-  if full then liftIO $ T.putStrLn "It's a draw!!"
+  GameState{..} <- get
+  if isBoardFull board
+  then liftIO $ T.putStrLn "It's a draw!!"
   else do
-    GameState{..} <- get
+    Config{..} <- ask
     colNo <- liftIO $ prompt turn
-    place colNo
-    modify (\s -> s{turn = toggle turn})
+    when (colNo < 1 || colNo > numOfCols) $ throwError (INVALID_COL colNo)
+    when (spacesLeftInCol colNo board <= 0) $ throwError (FULL_COL colNo)
+    let newBoard = place colNo turn board
+    modify (\gs -> gs{board = newBoard, turn = toggle turn})
     liftIO $ T.putStrLn "Current Board:\n\n"
     showBoard >>= liftIO . T.putStrLn
-    win <- won colNo
-    if win
+    if won colNo newBoard
     then liftIO $ printTextLn $ "Player " <> showb turn <> " won!"
     else play
   where
@@ -69,7 +72,8 @@ play = flip catchError errorHandler $ do
 main :: IO ()
 main = do
   let config@Config{..} = Config{numOfCols = 7, numOfRows = 6, winLength = 4}
-      initState@GameState{..} = GameState{board = replicate numOfCols [], turn = First}
+      newEmptyBoard = emptyBoard config :: SimpleBoard
+      initState@GameState{..} = GameState{board = newEmptyBoard, turn = First}
       game = showBoard >>= liftIO . T.putStrLn >>  play
   rs <- (fmap.fmap) fst . runExceptT . flip runStateT initState . runReaderT game $ config
   case rs of

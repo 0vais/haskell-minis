@@ -16,30 +16,6 @@ toggle :: Player -> Player
 toggle First = Second
 toggle Second = First
 
-place :: ColNo -> Game ()
-place cn = do
-  Config {..} <- ask
-  when (cn < 1 || cn > numOfCols) $ throwError (INVALID_COL cn)
-  gameState@GameState {..} <- get
-  let col = board !! (cn - 1)
-  when (length col >= numOfRows) $ throwError (FULL_COL cn)
-  let newBoard = take (cn - 1) board ++ [turn : col] ++ drop cn board
-  put gameState {board = newBoard}
-
-isBoardFull :: Game Bool
-isBoardFull = do
-  GameState {..} <- get
-  Config {..} <- ask
-  return $ all (\c -> length c == numOfRows) board
-
-won :: ColNo -> Game Bool
-won cn = do
-  GameState {..} <- get
-  cfg@Config {..} <- ask
-  let rowsFilled = length (board !! (cn - 1))
-      allLines = (fmap . fmap) (playerAt board) (rowColDiags cfg (cn, rowsFilled))
-  return $ any (== True) $ containsWin winLength <$> allLines
-
 -- for the given cell, it returns row, col and both diagnals containing this cell
 -- since we only need to connect winLength so maximum (2*winLength-1) cells are
 -- required to check in each row,col or diagnols.
@@ -65,10 +41,3 @@ containsWin winLength colors =
   where
     groups = fmap length . filter ((/= Nothing) . head) . group $ colors
 
-playerAt :: Board -> Cell -> Maybe Player
-playerAt board (cn, rn) =
-  let col = board !! (cn - 1)
-      rowsFilled = length col
-   in if rn > rowsFilled
-        then Nothing
-        else Just $ col !! (rowsFilled - rn)
