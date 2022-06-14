@@ -1,4 +1,19 @@
-* These are small programs created for practicing haskell.
+* Small programs for practicing haskell.
+** Connected4 game
+- The idea is to iteratively and incrementally create a connected4 game which can be played between two humen or human vs computer.
+- This is a solved problem and thus there are solutions available which can ensure that computer can always win.
+- Instead of using solutions that ensure victory, this project implements heuristic based approach. Well, because solutions that ensure victory are does not provide much scope for things like structuring/designing code to allow change in board representation, heuristic function etc. The goal is learning haskell not to solve the connected4 game :)
+- Current tentative step by step goals[2/9]:
+  - [X] Implement a simple human vs human text based game.
+  - [X] Restructure code to allow changing board representation.
+  - [ ] Implement a Binary Board representation.
+  - [ ] Restructure code to allow changing player and player can be human or computer.
+  - [ ] Implement a simple computer player.
+  - [ ] Implement a good enough computer player.
+  - [ ] Restructure code to easily allow changing the front end.
+  - [ ] Implement a better text-based version for display.
+  - [ ] Implement a graphics based version.
+
 ** Bytecode Evaluator
 *** Problem Statement:
 You are a TA at a university, and you want to evaluate your studentâ€™s homework
@@ -14,7 +29,7 @@ ByteCode (right) is given for the following pseudo code (left):
 |--------------------+-------------------|
 | function f() {     |                   |
 | x = 1              | LOAD_VAL 1        |
-| WRITE_VAR â€˜xâ€™  |                   |
+|                    | WRITE_VAR â€˜xâ€™ |
 | y = 2              | LOAD_VAL 2        |
 |                    | WRITE_VAR â€˜yâ€™ |
 | return (x + 1) * y | READ_VAR â€˜xâ€™  |
@@ -74,5 +89,3 @@ total.
   "Success: Return: 4"
   #+end_src
 
-** Connected4 game
-   A heuristic based implementation of four in a row/connected4 game.
