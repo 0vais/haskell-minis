@@ -1,9 +1,10 @@
-* Small programs for practicing haskell.
+* Small programs for practicing haskell
 ** Connected4 game
-- The idea is to iteratively and incrementally create a connected4 game which can be played between two humen or human vs computer.
-- This is a solved problem and thus there are solutions available which can ensure that computer can always win.
-- Instead of using solutions that ensure victory, this project implements heuristic based approach. Well, because solutions that ensure victory are does not provide much scope for things like structuring/designing code to allow change in board representation, heuristic function etc. The goal is learning haskell not to solve the connected4 game :)
-- Current tentative step by step goals[2/9]:
+- The idea is to iteratively and incrementally develop connected4 game which can be played as human vs human  or human vs computer.
+- There are solutions available that can ensure computer's victory.
+- Instead of using such solution, this project will use heuristic based approach(vs knowledge base approach) for for the computer player.
+- Well, because solutions that ensure victory may not provide much advantage(could be a wrong assumption) in designing code to allow changing board representation, heuristic function etc. Even such design can make the computer player slow! Also implementing such solution may require lot of work in optimization which will defeat the goal of learning haskell so :)
+- Current tentative milestones[2/9]:
   - [X] Implement a simple human vs human text based game.
   - [X] Restructure code to allow changing board representation.
   - [ ] Implement a Binary Board representation.
