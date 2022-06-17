@@ -1,1 +1,4 @@
 ignore-project: False
+allow-newer: base
+allow-newer: Cabal
+flags: +libgmp

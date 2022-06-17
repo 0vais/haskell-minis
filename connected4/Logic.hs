@@ -1,16 +1,9 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE TupleSections #-}
-
 module Logic where
 
-import Control.Monad.Except (ExceptT, MonadError (throwError))
-import Control.Monad.Identity
-import Control.Monad.Reader (MonadIO (liftIO), MonadReader (ask), ReaderT)
-import Control.Monad.State (StateT, get, put)
 import Data.Ix (inRange)
 import Data.List (group, unfoldr)
 import Types
+import Data.Bits ((.&.))
 
 toggle :: Player -> Player
 toggle First = Second
@@ -40,4 +33,3 @@ containsWin winLength colors =
     else maximum groups >= winLength
   where
     groups = fmap length . filter ((/= Nothing) . head) . group $ colors
-
