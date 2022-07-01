@@ -23,7 +23,7 @@ bestMove heuristic getNextMoves bound board depth =
               where
                 loop [] bestMove alpha = (bestMove, alpha)
                 loop (brd : brds) bestMove alpha =
-                  let (_, score) = negamaxLog brd (depth - 1) (-beta) (-alpha)
+                  let (_, score) = negamax brd (depth - 1) (-beta) (-alpha)
                       score' =  -score
                       (bestMove', alpha') =
                         if score' > alpha then (Just brd, score') else (bestMove, alpha)
@@ -31,17 +31,5 @@ bestMove heuristic getNextMoves bound board depth =
                         -- then loop brds bestMove' alpha'
                         then (bestMove', alpha')
                         else loop brds bestMove' alpha'
-      rs = negamaxLog board depth (-bound) bound
-      negamaxLog board depth alpha beta = rs
-        -- trace ("Negamax called for depth: " ++
-        --        show (depth) ++
-        --        " alpha: " ++
-        --        (show alpha) ++
-        --        " beta: " ++
-        --        (show beta) ++
-        --        " returned score: " ++
-        --        (show s) ++
-        --        "  Move: " ++
-        --        show (fmap  pastMoves b)) rs
-          where rs@(b,s) = negamax board depth alpha beta
+      rs = negamax board depth (-bound) bound
    in fromJust . fst $ rs
