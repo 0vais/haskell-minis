@@ -11,12 +11,12 @@
   - [X] Restructure code to allow different players(note: at present human player is considered separately)
   - [X] Implement alpha beta algorithm which can be used with two player games and not just connected4 game.
   - [X] Implement a good enough computer player - which involves making a good heuristic function.
-  - [ ] Implement a better text-based version for display.
+  - [ ] Implement a better text-based version for display with proper menu for user to choose players etc
 
-  - Possible Future impovements[0/1]:
-    - [ ] Implement a graphics based version.
-    - [ ] At present BitBoard is slower then SimpleBoard - which defeats the purpose of using bits for representing board :)
-    - [ ] Use transposition tables.
+- Possible Future impovements[0/3]:
+  - [ ] Implement a graphics based version.
+  - [ ] At present BitBoard is slower than SimpleBoard - which defeats the purpose of using bits for representing board!
+  - [ ] Use transposition tables.
 
 ** Bytecode Evaluator
 *** Problem Statement:
