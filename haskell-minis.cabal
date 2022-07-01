@@ -22,6 +22,7 @@ common common-deps-exts
   build-depends:
         base >=4.7 && <4.17
       , containers >=0.1 && <0.7
+      , unordered-containers ^>= 0.2.19.0
       , split ^>=0.2.3.4
       , text >=0.11.1 && <2.1
       , text-show ^>=3.9.6
@@ -34,7 +35,7 @@ executable connected4
     import: common-deps-exts
     main-is: Main.hs
     hs-source-dirs: connected4
-    other-modules: Logic, Types, SimpleBoard, BitBoard
+    other-modules: Logic, Types, SimpleBoard, BitBoard, GameSearch, AIPlayers, Heuristics
     build-depends:
       bitvec ^>=1.1.2.0
 

@@ -5,7 +5,7 @@ import Data.List (group, unfoldr)
 import Types
 import Data.Bits ((.&.))
 
-toggle :: Player -> Player
+toggle :: Turn -> Turn
 toggle First = Second
 toggle Second = First
 
@@ -26,7 +26,7 @@ rowColDiags Config {..} (cno, rno) =
     go (dc, dr) = takeWhile inBox . take winLength . iterate (\(cn', rn') -> (cn' + dc, rn' + dr))
     inBox (cn, rn) = inRange (1, numOfCols) cn && inRange (1, numOfRows) rn
 
-containsWin :: Int -> [Maybe Player] -> Bool
+containsWin :: Int -> [Maybe Turn] -> Bool
 containsWin winLength colors =
   if groups == []
     then False

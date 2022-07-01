@@ -15,8 +15,9 @@ import Types
 import SimpleBoard
 import BitBoard(BitBoard)
 import SimpleBoard (SimpleBoard)
+import AIPlayers
 
-instance TextShow Player where
+instance TextShow Turn where
   showb First = "One(1)"
   showb Second = "Two(2)"
 
@@ -33,7 +34,7 @@ showBoard = do
 
 printTextLn = T.putStrLn . toText
 
-prompt :: Player -> IO Int
+prompt :: Turn -> IO Int
 prompt player = do
   printTextLn $ "Player " <> showb player <> " Enter the column number [1-7]:"
   xs <- getLine
@@ -50,16 +51,21 @@ play = flip catchError errorHandler $ do
   then liftIO $ T.putStrLn "It's a draw!!"
   else do
     Config{..} <- ask
-    let currentPlayer = turn board
-    colNo <- liftIO $ prompt $ currentPlayer
-    when (colNo < 1 || colNo > numOfCols) $ throwError (INVALID_COL colNo)
-    when (not $ colHasSpace colNo board) $ throwError (FULL_COL colNo)
-    let newBoard = place colNo board
-    put newBoard
+    let currentTurn = turn board
+    if currentTurn == First then do
+      colNo <- liftIO $ prompt $ currentTurn
+      when (colNo < 1 || colNo > numOfCols) $ throwError (INVALID_COL colNo)
+      when (not $ colHasSpace colNo board) $ throwError (FULL_COL colNo)
+      let newBoard = place colNo board
+      put newBoard
+    else do
+      board' <- liftIO $ nextMove board DecentAIPlayer
+      put board'
     liftIO $ T.putStrLn "Current Board:\n\n"
     showBoard >>= liftIO . T.putStrLn
+    newBoard <- get
     if won newBoard
-    then liftIO $ printTextLn $ "Player " <> showb currentPlayer <> " won!"
+    then liftIO $ printTextLn $ "Player " <> showb currentTurn <> " won!"
     else play
   where
     errorHandler err = liftIO (errorHandler' err) >> play
@@ -71,7 +77,7 @@ play = flip catchError errorHandler $ do
 main :: IO ()
 main = do
   let config@Config{..} = Config{numOfCols = 7, numOfRows = 6, winLength = 4}
-      newEmptyBoard = emptyBoard config :: BitBoard
+      newEmptyBoard = emptyBoard config :: SimpleBoard
       game = showBoard >>= liftIO . T.putStrLn >>  play
   rs <- (fmap.fmap) fst . runExceptT . flip runStateT newEmptyBoard . runReaderT game $ config
   case rs of
