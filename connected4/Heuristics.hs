@@ -25,7 +25,7 @@ positionalHeuristic board =
 smartHeuristic :: (Board board) => [[Cell]] -> board -> Int
 smartHeuristic allCollinearCells board =
   if won board
-    then (-(maxBound-1))
+    then (-(maxBound-1-(numOfMoves board)))
     else
       if isBoardFull board
         then 0
