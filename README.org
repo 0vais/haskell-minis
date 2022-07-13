@@ -1,4 +1,4 @@
-* Small programs for practicing haskell
+* Mini projects for fun in haskell
 ** Connected4 game
 - The idea is to iteratively and incrementally develop connected4 game which can be played as human vs human  or human vs computer.
 - There are solutions available that can ensure computer's victory.
